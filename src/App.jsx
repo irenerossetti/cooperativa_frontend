@@ -12,6 +12,9 @@ import Semillas from './pages/Semillas';
 import Insumos from './pages/Insumos';
 import Campanas from './pages/Campanas';
 import LaboresAgricolas from './pages/LaboresAgricolas';
+import ProductosCosechados from './pages/ProductosCosechados';
+import Auditoria from './pages/Auditoria';
+import MetodosPago from './pages/MetodosPago';
 import PagePlaceholder from './components/common/PagePlaceholder';
 import { Key, FlaskConical, Tractor, Package, CreditCard, Calendar, FileText, BarChart3 } from 'lucide-react';
 
@@ -81,9 +84,9 @@ function App() {
                     <Route path="/insumos" element={<Insumos />} />
                     <Route path="/campaigns" element={<Campanas />} />
                     <Route path="/labores" element={<LaboresAgricolas />} />
-                    <Route path="/productos-cosechados" element={<PagePlaceholder title="Productos Cosechados" description="Gestiona los productos cosechados" icon={Package} />} />
-                    <Route path="/payment-methods" element={<PagePlaceholder title="Métodos de Pago" description="Administra los métodos de pago disponibles" icon={CreditCard} />} />
-                    <Route path="/auditoria" element={<PagePlaceholder title="Auditoría del Sistema" description="Revisa el historial de cambios y acciones" icon={FileText} />} />
+                    <Route path="/productos-cosechados" element={<ProductosCosechados />} />
+                    <Route path="/payment-methods" element={<MetodosPago />} />
+                    <Route path="/auditoria" element={<Auditoria />} />
                     <Route path="/reportes" element={<PagePlaceholder title="Reportes" description="Genera reportes del sistema" icon={BarChart3} />} />
                     <Route path="/reports/labors" element={<PagePlaceholder title="Reporte de Labores" description="Reporte de labores por campaña" icon={BarChart3} />} />
                     <Route path="/reports/production-campaign" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por campaña" icon={BarChart3} />} />
