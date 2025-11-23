@@ -1,0 +1,170 @@
+/**
+ * Configuración centralizada de endpoints de la API
+ * Mapeo directo con las URLs del backend Django
+ */
+
+const API_BASE = '/api';
+
+export const API_ENDPOINTS = {
+  // Autenticación y Usuarios (Sprint 1)
+  AUTH: {
+    LOGIN: `${API_BASE}/auth/users/login/`,
+    LOGOUT: `${API_BASE}/auth/users/logout/`,
+    ME: `${API_BASE}/auth/users/me/`,
+    CHANGE_PASSWORD: `${API_BASE}/auth/users/change_password/`,
+  },
+  
+  USERS: {
+    LIST: `${API_BASE}/auth/users/`,
+    DETAIL: (id) => `${API_BASE}/auth/users/${id}/`,
+    ACTIVATE: (id) => `${API_BASE}/auth/users/${id}/activate/`,
+    DEACTIVATE: (id) => `${API_BASE}/auth/users/${id}/deactivate/`,
+  },
+
+  ROLES: {
+    LIST: `${API_BASE}/auth/roles/`,
+    DETAIL: (id) => `${API_BASE}/auth/roles/${id}/`,
+  },
+
+  // Socios (Sprint 1)
+  PARTNERS: {
+    LIST: `${API_BASE}/partners/partners/`,
+    DETAIL: (id) => `${API_BASE}/partners/partners/${id}/`,
+    ACTIVATE: (id) => `${API_BASE}/partners/partners/${id}/activate/`,
+    DEACTIVATE: (id) => `${API_BASE}/partners/partners/${id}/deactivate/`,
+  },
+  
+  COMMUNITIES: {
+    LIST: `${API_BASE}/partners/communities/`,
+    DETAIL: (id) => `${API_BASE}/partners/communities/${id}/`,
+  },
+
+  // Parcelas (Sprint 1)
+  PARCELS: {
+    LIST: `${API_BASE}/parcels/parcels/`,
+    DETAIL: (id) => `${API_BASE}/parcels/parcels/${id}/`,
+    BY_PARTNER: (partnerId) => `${API_BASE}/parcels/parcels/?partner=${partnerId}`,
+    SOIL_TYPES: `${API_BASE}/parcels/soil-types/`,
+    CROPS: `${API_BASE}/parcels/crops/`,
+  },
+
+  // Auditoría (Sprint 1)
+  AUDIT: {
+    LIST: `${API_BASE}/audit/`,
+    DETAIL: (id) => `${API_BASE}/audit/${id}/`,
+    BY_MODEL: (model) => `${API_BASE}/audit/?model=${model}`,
+    BY_USER: (userId) => `${API_BASE}/audit/?user=${userId}`,
+  },
+
+  // Campañas (Sprint 2)
+  CAMPAIGNS: {
+    LIST: `${API_BASE}/campaigns/campaigns/`,
+    DETAIL: (id) => `${API_BASE}/campaigns/campaigns/${id}/`,
+    ACTIVE: `${API_BASE}/campaigns/campaigns/?is_active=true`,
+  },
+
+  // Labores Agrícolas (Sprint 2)
+  FARM_ACTIVITIES: {
+    LIST: `${API_BASE}/farm-activities/activities/`,
+    DETAIL: (id) => `${API_BASE}/farm-activities/activities/${id}/`,
+    BY_CAMPAIGN: (campaignId) => `${API_BASE}/farm-activities/activities/?campaign=${campaignId}`,
+    BY_PARCEL: (parcelId) => `${API_BASE}/farm-activities/?parcel=${parcelId}`,
+  },
+
+  // Inventario (Sprint 2)
+  INVENTORY: {
+    ITEMS: {
+      LIST: `${API_BASE}/inventory/items/`,
+      DETAIL: (id) => `${API_BASE}/inventory/items/${id}/`,
+      AVAILABILITY: `${API_BASE}/inventory/items/availability/`,
+      LOW_STOCK: `${API_BASE}/inventory/items/low_stock_items/`,
+    },
+    SEEDS: {
+      LIST: `${API_BASE}/inventory/items/?category=1`, // Filtrar por categoría SEED
+      DETAIL: (id) => `${API_BASE}/inventory/items/${id}/`,
+    },
+    INPUTS: {
+      LIST: `${API_BASE}/inventory/items/?category__in=2,3`, // PESTICIDE, FERTILIZER
+      DETAIL: (id) => `${API_BASE}/inventory/items/${id}/`,
+    },
+    MOVEMENTS: {
+      LIST: `${API_BASE}/inventory/movements/`,
+      DETAIL: (id) => `${API_BASE}/inventory/movements/${id}/`,
+    },
+  },
+
+  // Producción (Sprint 2)
+  PRODUCTION: {
+    LIST: `${API_BASE}/production/`,
+    DETAIL: (id) => `${API_BASE}/production/${id}/`,
+    BY_CAMPAIGN: (campaignId) => `${API_BASE}/production/?campaign=${campaignId}`,
+    BY_PARCEL: (parcelId) => `${API_BASE}/production/?parcel=${parcelId}`,
+  },
+
+  // Ventas (Sprint 3)
+  SALES: {
+    LIST: `${API_BASE}/sales/`,
+    DETAIL: (id) => `${API_BASE}/sales/${id}/`,
+  },
+
+  // Solicitudes (Sprint 3)
+  REQUESTS: {
+    LIST: `${API_BASE}/requests/`,
+    DETAIL: (id) => `${API_BASE}/requests/${id}/`,
+  },
+
+  // Precios (Sprint 3)
+  PRICING: {
+    LIST: `${API_BASE}/pricing/`,
+    DETAIL: (id) => `${API_BASE}/pricing/${id}/`,
+  },
+
+  // Envíos (Sprint 3)
+  SHIPPING: {
+    LIST: `${API_BASE}/shipping/`,
+    DETAIL: (id) => `${API_BASE}/shipping/${id}/`,
+  },
+
+  // IA y Recomendaciones (Sprint 4)
+  AI: {
+    RECOMMENDATIONS: `${API_BASE}/ai/recommendations/`,
+  },
+
+  // Financiero (Sprint 4)
+  FINANCIAL: {
+    LIST: `${API_BASE}/financial/`,
+    DETAIL: (id) => `${API_BASE}/financial/${id}/`,
+  },
+
+  // Reportes (Sprint 4)
+  REPORTS: {
+    LABORS_BY_CAMPAIGN: `${API_BASE}/reports/labors-by-campaign/`,
+    PRODUCTION_BY_CAMPAIGN: `${API_BASE}/reports/production-by-campaign/`,
+    PRODUCTION_BY_PARCEL: `${API_BASE}/reports/production-by-parcel/`,
+  },
+
+  // Trazabilidad (Sprint 4)
+  TRACEABILITY: {
+    LIST: `${API_BASE}/traceability/`,
+    DETAIL: (id) => `${API_BASE}/traceability/${id}/`,
+  },
+
+  // Analíticas (Sprint 4)
+  ANALYTICS: {
+    DASHBOARD: `${API_BASE}/analytics/dashboard/`,
+  },
+
+  // Monitoreo (Sprint 5)
+  MONITORING: {
+    LIST: `${API_BASE}/monitoring/`,
+    DETAIL: (id) => `${API_BASE}/monitoring/${id}/`,
+  },
+
+  // Clima (Sprint 5)
+  WEATHER: {
+    CURRENT: `${API_BASE}/weather/current/`,
+    FORECAST: `${API_BASE}/weather/forecast/`,
+  },
+};
+
+export default API_ENDPOINTS;

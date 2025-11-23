@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -139,4 +141,61 @@ select option:disabled {
     background-color: #064e3b !important;
     color: #ffffff !important;
   }
+}
+
+
+/* Estilos personalizados para react-phone-number-input */
+.phone-input-custom {
+  width: 100%;
+}
+
+.phone-input-custom .PhoneInputInput {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.phone-input-custom .PhoneInputInput:focus {
+  outline: 2px solid rgba(16, 185, 129, 0.5);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.phone-input-custom .PhoneInputInput::placeholder {
+  color: rgba(16, 185, 129, 0.5);
+}
+
+.phone-input-custom .PhoneInputCountry {
+  margin-right: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.phone-input-custom .PhoneInputCountrySelect {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.phone-input-custom .PhoneInputCountrySelect:focus {
+  outline: none;
+}
+
+.phone-input-custom .PhoneInputCountryIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.phone-input-custom .PhoneInputCountrySelectArrow {
+  color: rgba(16, 185, 129, 0.8);
+  margin-left: 0.25rem;
 }

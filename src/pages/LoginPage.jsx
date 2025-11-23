@@ -72,7 +72,7 @@ const LoginPage = () => {
 
             {/* Username Field */}
             <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium block">Usuario</label>
+              <label className="text-white/90 text-sm font-medium block">Usuario o Email</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-emerald-300/60" />
                 <input
@@ -81,7 +81,7 @@ const LoginPage = () => {
                   value={formData.username}
                   onChange={handleInputChange}
                   className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 text-white placeholder-emerald-200/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent backdrop-blur-sm transition-all duration-200"
-                  placeholder="Ingrese su usuario"
+                  placeholder="Ingrese su usuario o email"
                   autoComplete="username"
                   required
                 />

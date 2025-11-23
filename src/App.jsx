@@ -4,6 +4,16 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import MainLayout from './components/layout/MainLayout';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
+import Socios from './pages/Socios';
+import Usuarios from './pages/Usuarios';
+import Roles from './pages/Roles';
+import Parcelas from './pages/Parcelas';
+import Semillas from './pages/Semillas';
+import Insumos from './pages/Insumos';
+import Campanas from './pages/Campanas';
+import LaboresAgricolas from './pages/LaboresAgricolas';
+import PagePlaceholder from './components/common/PagePlaceholder';
+import { Key, FlaskConical, Tractor, Package, CreditCard, Calendar, FileText, BarChart3 } from 'lucide-react';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
@@ -60,22 +70,24 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     
-                    {/* Placeholder para otras rutas */}
-                    <Route path="/socios" element={<div className="text-white">Socios - En desarrollo</div>} />
-                    <Route path="/usuarios" element={<div className="text-white">Usuarios - En desarrollo</div>} />
-                    <Route path="/roles" element={<div className="text-white">Roles - En desarrollo</div>} />
-                    <Route path="/semillas" element={<div className="text-white">Semillas - En desarrollo</div>} />
-                    <Route path="/parcelas" element={<div className="text-white">Parcelas - En desarrollo</div>} />
-                    <Route path="/insumos" element={<div className="text-white">Insumos - En desarrollo</div>} />
-                    <Route path="/labores" element={<div className="text-white">Labores - En desarrollo</div>} />
-                    <Route path="/productos-cosechados" element={<div className="text-white">Productos - En desarrollo</div>} />
-                    <Route path="/payment-methods" element={<div className="text-white">Métodos de Pago - En desarrollo</div>} />
-                    <Route path="/campaigns" element={<div className="text-white">Campañas - En desarrollo</div>} />
-                    <Route path="/auditoria" element={<div className="text-white">Auditoría - En desarrollo</div>} />
-                    <Route path="/reportes" element={<div className="text-white">Reportes - En desarrollo</div>} />
-                    <Route path="/reports/labors" element={<div className="text-white">Reporte Labores - En desarrollo</div>} />
-                    <Route path="/reports/production-campaign" element={<div className="text-white">Reporte Producción Campaña - En desarrollo</div>} />
-                    <Route path="/reports/production-plot" element={<div className="text-white">Reporte Producción Parcela - En desarrollo</div>} />
+                    {/* Rutas principales */}
+                    <Route path="/socios" element={<Socios />} />
+                    <Route path="/usuarios" element={<Usuarios />} />
+                    <Route path="/roles" element={<Roles />} />
+                    <Route path="/semillas" element={<Semillas />} />
+                    <Route path="/parcelas" element={<Parcelas />} />
+                    
+                    {/* Rutas en desarrollo */}
+                    <Route path="/insumos" element={<Insumos />} />
+                    <Route path="/campaigns" element={<Campanas />} />
+                    <Route path="/labores" element={<LaboresAgricolas />} />
+                    <Route path="/productos-cosechados" element={<PagePlaceholder title="Productos Cosechados" description="Gestiona los productos cosechados" icon={Package} />} />
+                    <Route path="/payment-methods" element={<PagePlaceholder title="Métodos de Pago" description="Administra los métodos de pago disponibles" icon={CreditCard} />} />
+                    <Route path="/auditoria" element={<PagePlaceholder title="Auditoría del Sistema" description="Revisa el historial de cambios y acciones" icon={FileText} />} />
+                    <Route path="/reportes" element={<PagePlaceholder title="Reportes" description="Genera reportes del sistema" icon={BarChart3} />} />
+                    <Route path="/reports/labors" element={<PagePlaceholder title="Reporte de Labores" description="Reporte de labores por campaña" icon={BarChart3} />} />
+                    <Route path="/reports/production-campaign" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por campaña" icon={BarChart3} />} />
+                    <Route path="/reports/production-plot" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por parcela" icon={BarChart3} />} />
                   </Routes>
                 </MainLayout>
               </ProtectedRoute>
