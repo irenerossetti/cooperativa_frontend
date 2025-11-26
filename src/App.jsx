@@ -23,6 +23,9 @@ import Ventas from './pages/Ventas';
 import LaboresPorCampana from './pages/reports/LaboresPorCampana';
 import ProduccionPorCampana from './pages/reports/ProduccionPorCampana';
 import ProduccionPorParcela from './pages/reports/ProduccionPorParcela';
+import SociosPorComunidad from './pages/reports/SociosPorComunidad';
+import HectareasPorCultivo from './pages/reports/HectareasPorCultivo';
+import ReportesIA from './pages/reports/ReportesIA';
 import ProductosSemillas from './pages/cliente/ProductosSemillas';
 import ProductosFertilizantes from './pages/cliente/ProductosFertilizantes';
 import ProductosPorCampana from './pages/cliente/ProductosPorCampana';
@@ -155,6 +158,9 @@ function App() {
                     <Route path="/reports/labors" element={<LaboresPorCampana />} />
                     <Route path="/reports/production-campaign" element={<ProduccionPorCampana />} />
                     <Route path="/reports/production-plot" element={<ProduccionPorParcela />} />
+                    <Route path="/reports/partners-community" element={<SociosPorComunidad />} />
+                    <Route path="/reports/hectares-crop" element={<HectareasPorCultivo />} />
+                    <Route path="/reports/ia" element={<ReportesIA />} />
                   </Routes>
                 </MainLayout>
               </ProtectedRoute>

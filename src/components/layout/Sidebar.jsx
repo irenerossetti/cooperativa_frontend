@@ -75,6 +75,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         { path: '/reports/labors', label: 'Labores por Campaña', icon: TrendingUp },
         { path: '/reports/production-campaign', label: 'Producción por Campaña', icon: TrendingUp },
         { path: '/reports/production-plot', label: 'Producción por Parcela', icon: TrendingUp },
+        { path: '/reports/partners-community', label: 'Socios por Comunidad', icon: Users },
+        { path: '/reports/hectares-crop', label: 'Hectáreas por Cultivo', icon: Map },
+        { path: '/reports/ia', label: 'Reportes con IA', icon: BarChart3 },
       ]
     }
   ];

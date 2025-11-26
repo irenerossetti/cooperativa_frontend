@@ -51,9 +51,26 @@ const LaboresPorCampana = () => {
 
   const handleExport = async (format) => {
     try {
+      // Preparar datos filtrados con solo las columnas seleccionadas
+      const exportData = filteredData.map(item => {
+        const row = {};
+        selectedColumns.forEach(colKey => {
+          row[colKey] = item[colKey];
+        });
+        return row;
+      });
+
+      // Preparar headers con solo las columnas seleccionadas
+      const exportHeaders = availableColumns
+        .filter(col => selectedColumns.includes(col.key))
+        .map(col => col.label);
+
       const response = await api.post('/api/reports/reports/export_report/', {
         report_type: 'performance_by_partner',
-        format: format
+        format: format,
+        data: exportData,
+        headers: exportHeaders,
+        selected_columns: selectedColumns
       }, {
         responseType: 'blob'
       });

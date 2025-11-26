@@ -3,6 +3,7 @@ import { Brain, TrendingUp, Sparkles, Download, RefreshCw, AlertCircle, Users, M
 import api from '../../services/api';
 import VoiceReportAssistant from '../../components/reports/VoiceReportAssistant';
 import SimpleBarChart from '../../components/reports/SimpleBarChart';
+import MarketAnalysisSection from '../../components/reports/MarketAnalysisSection';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -579,6 +580,9 @@ const ReportesIA = () => {
           </div>
         </div>
       )}
+
+      {/* Sección de Alertas Comerciales */}
+      <MarketAnalysisSection />
     </div>
   );
 };

@@ -39,9 +39,26 @@ const ProduccionPorCampana = () => {
 
   const handleExport = async (format) => {
     try {
+      // Preparar datos con solo las columnas seleccionadas
+      const exportData = data.map(item => {
+        const row = {};
+        selectedColumns.forEach(colKey => {
+          row[colKey] = item[colKey];
+        });
+        return row;
+      });
+
+      // Preparar headers con solo las columnas seleccionadas
+      const exportHeaders = availableColumns
+        .filter(col => selectedColumns.includes(col.key))
+        .map(col => col.label);
+
       const response = await api.post('/api/reports/reports/export_report/', {
         report_type: 'hectares_by_crop',
-        format: format
+        format: format,
+        data: exportData,
+        headers: exportHeaders,
+        selected_columns: selectedColumns
       }, {
         responseType: 'blob'
       });
