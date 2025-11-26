@@ -9,13 +9,15 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 // Configurar axios para enviar cookies
 axios.defaults.withCredentials = true;
 
+// Configurar organización inicial desde localStorage
+const initialOrganization = localStorage.getItem('currentOrganization') || 'sanjuan';
+axios.defaults.headers.common['X-Organization-Subdomain'] = initialOrganization;
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentOrganization, setCurrentOrganization] = useState(
-    localStorage.getItem('currentOrganization') || 'sanjuan'
-  );
+  const [currentOrganization, setCurrentOrganization] = useState(initialOrganization);
 
   useEffect(() => {
     checkAuth();
@@ -24,6 +26,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Guardar organización actual en localStorage
     localStorage.setItem('currentOrganization', currentOrganization);
+    
+    // Configurar axios para enviar el header de organización en todas las requests
+    axios.defaults.headers.common['X-Organization-Subdomain'] = currentOrganization;
   }, [currentOrganization]);
 
   const checkAuth = async () => {
@@ -46,6 +51,16 @@ export const AuthProvider = ({ children }) => {
       // Django Session Authentication - no necesitamos token
       setUser(user);
       
+      // Si el usuario tiene partner, usar su organización automáticamente
+      if (user.partner && user.partner.organization) {
+        const userOrg = user.partner.organization.subdomain;
+        if (userOrg !== currentOrganization) {
+          setCurrentOrganization(userOrg);
+          localStorage.setItem('currentOrganization', userOrg);
+          axios.defaults.headers.common['X-Organization-Subdomain'] = userOrg;
+        }
+      }
+      
       return response.data;
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Error al iniciar sesión';
@@ -65,10 +80,34 @@ export const AuthProvider = ({ children }) => {
   };
 
   const changeOrganization = (orgSubdomain) => {
+    // Si el usuario está logueado, solo permitir cambio si es admin
+    if (user && user.role?.name !== 'ADMIN') {
+      console.warn('Solo administradores pueden cambiar de organización');
+      return;
+    }
+    // Si no está logueado (en login page), permitir cambio libre
     setCurrentOrganization(orgSubdomain);
-    // Recargar la página para aplicar el cambio
-    window.location.reload();
+    localStorage.setItem('currentOrganization', orgSubdomain);
+    axios.defaults.headers.common['X-Organization-Subdomain'] = orgSubdomain;
+    
+    // Solo recargar si ya está logueado
+    if (user) {
+      window.location.reload();
+    }
   };
+  
+  // Detectar organización del usuario al hacer login
+  useEffect(() => {
+    if (user && user.partner) {
+      // Si el usuario tiene un partner asociado, usar su organización
+      const partnerOrg = user.partner.organization?.subdomain;
+      if (partnerOrg && partnerOrg !== currentOrganization) {
+        setCurrentOrganization(partnerOrg);
+        localStorage.setItem('currentOrganization', partnerOrg);
+        axios.defaults.headers.common['X-Organization-Subdomain'] = partnerOrg;
+      }
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ 

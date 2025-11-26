@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Building2, Shield, User, Lock, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Building2, Shield, User, Lock, AlertCircle, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,8 +11,15 @@ const LoginPage = () => {
     password: ''
   });
 
-  const { login, error } = useAuth();
+  const { login, error, currentOrganization, changeOrganization } = useAuth();
   const navigate = useNavigate();
+  
+  // Organizaciones disponibles
+  const organizations = [
+    { subdomain: 'sanjuan', name: 'Cooperativa San Juan' },
+    { subdomain: 'progreso', name: 'Cooperativa El Progreso' },
+    { subdomain: 'demo', name: 'Cooperativa Demo' },
+  ];
 
   const handleInputChange = (e) => {
     setFormData({
@@ -59,6 +66,26 @@ const LoginPage = () => {
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Cooperativa Agrícola</h1>
             <p className="text-emerald-100/80 text-sm">Sistema de Gestión Cooperativa</p>
+          </div>
+
+          {/* Organization Selector */}
+          <div className="mb-6">
+            <label className="text-white/90 text-sm font-medium block mb-2">Seleccionar Cooperativa</label>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-emerald-300/60 pointer-events-none" />
+              <select
+                value={currentOrganization}
+                onChange={(e) => changeOrganization(e.target.value)}
+                className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-10 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent backdrop-blur-sm transition-all duration-200 cursor-pointer"
+              >
+                {organizations.map((org) => (
+                  <option key={org.subdomain} value={org.subdomain} className="bg-emerald-900 text-white">
+                    {org.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-emerald-300/60 pointer-events-none" />
+            </div>
           </div>
 
           {/* Login Form */}

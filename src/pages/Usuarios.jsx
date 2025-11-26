@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, X, Save, Eye, EyeOff } from 'lucide-react';
 import api from '../services/api';
 import API_ENDPOINTS from '../config/apiEndpoints';
+import PermissionGuard from '../components/PermissionGuard';
+import { usePermissions } from '../hooks/usePermissions';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);

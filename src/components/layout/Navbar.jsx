@@ -54,7 +54,7 @@ const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
 
       {/* Right side - User menu */}
       <div className="flex items-center space-x-4">
-        {/* Organization Selector - Multi-tenant */}
+        {/* Organization Selector (solo para ADMIN) */}
         <OrganizationSelector />
         
         {/* Notifications */}

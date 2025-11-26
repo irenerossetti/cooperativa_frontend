@@ -37,14 +37,11 @@ api.interceptors.request.use(
       }
     }
     
-    // Agregar parámetro de organización (multi-tenant)
+    // Agregar header de organización (multi-tenant)
     const currentOrg = localStorage.getItem('currentOrganization') || 'sanjuan';
-    if (!config.params) {
-      config.params = {};
-    }
-    // Solo agregar org si no es una ruta de autenticación
+    // Solo agregar header si no es una ruta de autenticación
     if (!config.url.includes('/auth/') && !config.url.includes('/tenants/register')) {
-      config.params.org = currentOrg;
+      config.headers['X-Organization-Subdomain'] = currentOrg;
     }
     
     return config;

@@ -50,10 +50,11 @@ export const API_ENDPOINTS = {
 
   // Auditoría (Sprint 1)
   AUDIT: {
-    LIST: `${API_BASE}/audit/`,
-    DETAIL: (id) => `${API_BASE}/audit/${id}/`,
-    BY_MODEL: (model) => `${API_BASE}/audit/?model=${model}`,
-    BY_USER: (userId) => `${API_BASE}/audit/?user=${userId}`,
+    LIST: `${API_BASE}/audit/logs/`,
+    DETAIL: (id) => `${API_BASE}/audit/logs/${id}/`,
+    BY_MODEL: (model) => `${API_BASE}/audit/logs/?model=${model}`,
+    BY_USER: (userId) => `${API_BASE}/audit/logs/?user=${userId}`,
+    DEVELOPER_ACCESS: `${API_BASE}/audit/logs/developer-access/`,
   },
 
   // Campañas (Sprint 2)

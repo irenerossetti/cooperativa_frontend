@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, FileText, User, Calendar, Filter, X } from 'lucide-react';
 import api from '../services/api';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 const Auditoria = () => {
   const [logs, setLogs] = useState([]);
@@ -45,7 +46,7 @@ const Auditoria = () => {
       if (searchTerm) params.append('search', searchTerm);
 
       const queryString = params.toString();
-      const url = `/api/audit/logs/${queryString ? `?${queryString}` : ''}`;
+      const url = `${API_ENDPOINTS.AUDIT.LIST}${queryString ? `?${queryString}` : ''}`;
       
       const response = await api.get(url);
       const data = response.data.results || response.data || [];
@@ -60,7 +61,7 @@ const Auditoria = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get('/api/auth/users/');
+      const response = await api.get(API_ENDPOINTS.USERS.LIST);
       const data = response.data.results || response.data || [];
       setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
