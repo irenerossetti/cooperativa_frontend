@@ -17,6 +17,9 @@ import ProductosCosechados from './pages/ProductosCosechados';
 import Auditoria from './pages/Auditoria';
 import MetodosPago from './pages/MetodosPago';
 import Ventas from './pages/Ventas';
+import LaboresPorCampana from './pages/reports/LaboresPorCampana';
+import ProduccionPorCampana from './pages/reports/ProduccionPorCampana';
+import ProduccionPorParcela from './pages/reports/ProduccionPorParcela';
 import ProductosSemillas from './pages/cliente/ProductosSemillas';
 import ProductosFertilizantes from './pages/cliente/ProductosFertilizantes';
 import ProductosPorCampana from './pages/cliente/ProductosPorCampana';
@@ -115,9 +118,9 @@ function App() {
                     
                     {/* Reportes */}
                     <Route path="/reportes" element={<PagePlaceholder title="Reportes" description="Genera reportes del sistema" icon={BarChart3} />} />
-                    <Route path="/reports/labors" element={<PagePlaceholder title="Reporte de Labores" description="Reporte de labores por campaña" icon={BarChart3} />} />
-                    <Route path="/reports/production-campaign" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por campaña" icon={BarChart3} />} />
-                    <Route path="/reports/production-plot" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por parcela" icon={BarChart3} />} />
+                    <Route path="/reports/labors" element={<LaboresPorCampana />} />
+                    <Route path="/reports/production-campaign" element={<ProduccionPorCampana />} />
+                    <Route path="/reports/production-plot" element={<ProduccionPorParcela />} />
                   </Routes>
                 </MainLayout>
               </ProtectedRoute>

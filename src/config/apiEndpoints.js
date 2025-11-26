@@ -162,9 +162,17 @@ export const API_ENDPOINTS = {
 
   // Reportes (Sprint 4)
   REPORTS: {
-    LABORS_BY_CAMPAIGN: `${API_BASE}/reports/labors-by-campaign/`,
-    PRODUCTION_BY_CAMPAIGN: `${API_BASE}/reports/production-by-campaign/`,
-    PRODUCTION_BY_PARCEL: `${API_BASE}/reports/production-by-parcel/`,
+    TYPES: `${API_BASE}/reports/types/`,
+    LIST: `${API_BASE}/reports/reports/`,
+    PERFORMANCE_BY_PARTNER: `${API_BASE}/reports/reports/performance_by_partner/`,
+    POPULATION_ACTIVE: `${API_BASE}/reports/reports/population_active_partners/`,
+    HECTARES_BY_CROP: `${API_BASE}/reports/reports/hectares_by_crop/`,
+    PERFORMANCE_BY_PARCEL: `${API_BASE}/reports/reports/performance_by_parcel/`,
+    EXPORT: `${API_BASE}/reports/reports/export_report/`,
+    // Alias para compatibilidad
+    LABORS_BY_CAMPAIGN: `${API_BASE}/reports/reports/performance_by_partner/`,
+    PRODUCTION_BY_CAMPAIGN: `${API_BASE}/reports/reports/hectares_by_crop/`,
+    PRODUCTION_BY_PARCEL: `${API_BASE}/reports/reports/performance_by_parcel/`,
   },
 
   // Trazabilidad (Sprint 4)
