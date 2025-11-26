@@ -1,53 +1,40 @@
 import React from 'react';
-import { Users, Sprout, Map, Package, TrendingUp, Calendar } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import AdminDashboard from './dashboards/AdminDashboard';
+import SocioDashboard from './dashboards/SocioDashboard';
+import ClienteDashboard from './dashboards/ClienteDashboard';
 
 const Dashboard = () => {
-  const stats = [
-    { label: 'Socios Activos', value: '0', icon: Users, color: 'from-blue-500 to-blue-600' },
-    { label: 'Parcelas', value: '0', icon: Map, color: 'from-green-500 to-green-600' },
-    { label: 'Campañas Activas', value: '0', icon: Calendar, color: 'from-purple-500 to-purple-600' },
-    { label: 'Productos', value: '0', icon: Package, color: 'from-orange-500 to-orange-600' },
-  ];
+  const { user } = useAuth();
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
-        <h1 className="text-2xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-emerald-200/80">Bienvenido al Sistema de Gestión Cooperativa</p>
-      </div>
+  // Determinar qué dashboard mostrar según el rol
+  const getUserRole = () => {
+    if (user?.is_staff || user?.is_superuser) {
+      return 'ADMIN';
+    }
+    if (user?.role === 'PARTNER') {
+      return 'PARTNER';
+    }
+    if (user?.role === 'CUSTOMER') {
+      return 'CUSTOMER';
+    }
+    // Por defecto, si no tiene rol específico, mostrar dashboard de cliente
+    return 'CUSTOMER';
+  };
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-200"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-lg flex items-center justify-center`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-1">{stat.value}</h3>
-              <p className="text-emerald-200/70 text-sm">{stat.label}</p>
-            </div>
-          );
-        })}
-      </div>
+  const role = getUserRole();
 
-      {/* Recent Activity */}
-      <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Actividad Reciente</h2>
-        <div className="text-center py-8">
-          <p className="text-emerald-200/60">No hay actividad reciente</p>
-        </div>
-      </div>
-    </div>
-  );
+  // Renderizar el dashboard correspondiente
+  switch (role) {
+    case 'ADMIN':
+      return <AdminDashboard />;
+    case 'PARTNER':
+      return <SocioDashboard />;
+    case 'CUSTOMER':
+      return <ClienteDashboard />;
+    default:
+      return <ClienteDashboard />;
+  }
 };
 
 export default Dashboard;

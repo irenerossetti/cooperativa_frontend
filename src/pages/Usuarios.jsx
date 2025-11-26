@@ -12,12 +12,11 @@ const Usuarios = () => {
   const [editingId, setEditingId] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
     first_name: '',
     last_name: '',
+    email: '',
+    phone: '',
     password: '',
-    role: '',
     is_active: true,
   });
   const [formErrors, setFormErrors] = useState({});
@@ -66,7 +65,6 @@ const Usuarios = () => {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.username.trim()) errors.username = 'El usuario es requerido';
     if (!formData.first_name.trim()) errors.first_name = 'El nombre es requerido';
     if (!formData.last_name.trim()) errors.last_name = 'El apellido es requerido';
     if (!formData.email.trim()) errors.email = 'El email es requerido';
@@ -86,7 +84,12 @@ const Usuarios = () => {
 
     setSubmitting(true);
     try {
-      const dataToSend = { ...formData };
+      const dataToSend = { 
+        ...formData,
+        // Generar username automáticamente del email
+        username: formData.email.split('@')[0]
+      };
+      
       // Si estamos editando y no hay password, no lo enviamos
       if (editingId && !dataToSend.password) {
         delete dataToSend.password;
@@ -100,14 +103,14 @@ const Usuarios = () => {
       
       await fetchUsuarios();
       handleCloseModal();
-      alert(editingId ? 'Usuario actualizado exitosamente' : 'Usuario creado exitosamente');
+      alert(editingId ? 'Cliente actualizado exitosamente' : 'Cliente creado exitosamente');
     } catch (error) {
-      console.error('Error saving usuario:', error);
+      console.error('Error saving cliente:', error);
       console.error('Error response:', error.response?.data);
       
       if (error.response?.data) {
         const errorData = error.response.data;
-        let errorMessage = 'Error al guardar el usuario:\n';
+        let errorMessage = 'Error al guardar el cliente:\n';
         
         if (typeof errorData === 'object') {
           Object.keys(errorData).forEach(key => {
@@ -124,7 +127,7 @@ const Usuarios = () => {
         
         alert(errorMessage);
       } else {
-        alert('Error al guardar el usuario. Por favor intente nuevamente.');
+        alert('Error al guardar el cliente. Por favor intente nuevamente.');
       }
     } finally {
       setSubmitting(false);
@@ -134,12 +137,11 @@ const Usuarios = () => {
   const handleEdit = (usuario) => {
     setEditingId(usuario.id);
     setFormData({
-      username: usuario.username || '',
-      email: usuario.email || '',
       first_name: usuario.first_name || '',
       last_name: usuario.last_name || '',
-      password: '', // No pre-cargar password
-      role: usuario.role || '',
+      email: usuario.email || '',
+      phone: usuario.phone || '',
+      password: '',
       is_active: usuario.is_active !== undefined ? usuario.is_active : true,
     });
     setShowModal(true);
@@ -163,12 +165,11 @@ const Usuarios = () => {
     setShowModal(false);
     setEditingId(null);
     setFormData({
-      username: '',
-      email: '',
       first_name: '',
       last_name: '',
+      email: '',
+      phone: '',
       password: '',
-      role: '',
       is_active: true,
     });
     setFormErrors({});
@@ -190,15 +191,15 @@ const Usuarios = () => {
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Gestión de Usuarios</h1>
-            <p className="text-emerald-200/80">Administra los usuarios del sistema</p>
+            <h1 className="text-2xl font-bold text-white mb-2">Gestión de Clientes</h1>
+            <p className="text-emerald-200/80">Administra los clientes del sistema</p>
           </div>
           <button 
             onClick={() => setShowModal(true)}
             className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200"
           >
             <Plus className="w-5 h-5" />
-            <span>Nuevo Usuario</span>
+            <span>Nuevo Cliente</span>
           </button>
         </div>
       </div>
@@ -243,7 +244,7 @@ const Usuarios = () => {
               ) : filteredUsuarios.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="px-6 py-8 text-center text-emerald-200/60">
-                    No se encontraron usuarios
+                    No se encontraron clientes
                   </td>
                 </tr>
               ) : (
@@ -297,7 +298,7 @@ const Usuarios = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-white">
-                  {editingId ? 'Editar Usuario' : 'Nuevo Usuario'}
+                  {editingId ? 'Editar Cliente' : 'Nuevo Cliente'}
                 </h2>
                 <button
                   onClick={handleCloseModal}
@@ -308,24 +309,6 @@ const Usuarios = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-white/90 text-sm font-medium mb-2">
-                    Usuario *
-                  </label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-emerald-200/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                    placeholder="Ej: jperez"
-                    disabled={editingId} // No permitir cambiar username al editar
-                  />
-                  {formErrors.username && (
-                    <p className="text-red-300 text-xs mt-1">{formErrors.username}</p>
-                  )}
-                </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white/90 text-sm font-medium mb-2">
@@ -372,11 +355,29 @@ const Usuarios = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-emerald-200/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                    placeholder="usuario@email.com"
+                    placeholder="cliente@email.com"
+                    disabled={editingId}
                   />
                   {formErrors.email && (
                     <p className="text-red-300 text-xs mt-1">{formErrors.email}</p>
                   )}
+                  {!editingId && (
+                    <p className="text-emerald-200/60 text-xs mt-1">El usuario se generará automáticamente del email</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-white/90 text-sm font-medium mb-2">
+                    Teléfono
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-emerald-200/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    placeholder="+591 12345678"
+                  />
                 </div>
 
                 <div>
@@ -405,25 +406,6 @@ const Usuarios = () => {
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-white/90 text-sm font-medium mb-2">
-                    Rol
-                  </label>
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                  >
-                    <option value="">Sin rol asignado</option>
-                    {roles.map(role => (
-                      <option key={role.id} value={role.id}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -432,7 +414,7 @@ const Usuarios = () => {
                     onChange={handleInputChange}
                     className="w-4 h-4 text-emerald-500 bg-white/10 border-white/20 rounded focus:ring-emerald-400 focus:ring-2"
                   />
-                  <label className="text-white/90 text-sm">Usuario activo</label>
+                  <label className="text-white/90 text-sm">Cliente activo</label>
                 </div>
 
                 <div className="flex space-x-3 pt-4">

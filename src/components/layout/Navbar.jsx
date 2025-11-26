@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { Menu, Bell, User, LogOut, Settings, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, Bell, User, LogOut, Settings, Loader2, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import OrganizationSelector from '../OrganizationSelector';
 
 const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
   const { user, logout, loading } = useAuth();
+  const { cartCount } = useCart();
+  const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Mostrar carrito para todos los usuarios autenticados
+  const showCart = !!user;
 
   const handleLogout = async () => {
     if (window.confirm('¿Está seguro de que desea cerrar sesión?')) {
@@ -18,6 +26,10 @@ const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
         setIsLoggingOut(false);
       }
     }
+  };
+
+  const handleCartClick = () => {
+    navigate('/mis-pedidos');
   };
 
   return (
@@ -42,11 +54,30 @@ const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
 
       {/* Right side - User menu */}
       <div className="flex items-center space-x-4">
+        {/* Organization Selector - Multi-tenant */}
+        <OrganizationSelector />
+        
         {/* Notifications */}
         <button className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white relative">
           <Bell className="w-5 h-5" />
           <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
         </button>
+
+        {/* Shopping Cart - Para clientes y socios */}
+        {showCart && (
+          <button 
+            onClick={handleCartClick}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white relative"
+            title="Mi carrito"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">
+                {cartCount}
+              </span>
+            )}
+          </button>
+        )}
 
         {/* User menu */}
         <div className="flex items-center space-x-3">

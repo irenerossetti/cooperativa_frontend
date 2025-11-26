@@ -20,10 +20,10 @@ const MainLayout = ({ children }) => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
-      <div className="relative min-h-full">
+      <div className="relative min-h-full lg:ml-64">
         <Navbar onMenuToggle={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         
-        <main className={`p-6 pb-8 transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : ''}`}>
+        <main className="p-6 pb-8">
           {children}
         </main>
       </div>

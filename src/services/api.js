@@ -26,7 +26,7 @@ function getCookie(name) {
   return cookieValue;
 }
 
-// Interceptor para agregar CSRF token
+// Interceptor para agregar CSRF token y organización
 api.interceptors.request.use(
   (config) => {
     // Agregar CSRF token para peticiones que modifican datos
@@ -36,6 +36,17 @@ api.interceptors.request.use(
         config.headers['X-CSRFToken'] = csrfToken;
       }
     }
+    
+    // Agregar parámetro de organización (multi-tenant)
+    const currentOrg = localStorage.getItem('currentOrganization') || 'sanjuan';
+    if (!config.params) {
+      config.params = {};
+    }
+    // Solo agregar org si no es una ruta de autenticación
+    if (!config.url.includes('/auth/') && !config.url.includes('/tenants/register')) {
+      config.params.org = currentOrg;
+    }
+    
     return config;
   },
   (error) => Promise.reject(error)

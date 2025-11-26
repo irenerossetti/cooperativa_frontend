@@ -13,10 +13,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentOrganization, setCurrentOrganization] = useState(
+    localStorage.getItem('currentOrganization') || 'sanjuan'
+  );
 
   useEffect(() => {
     checkAuth();
   }, []);
+  
+  useEffect(() => {
+    // Guardar organización actual en localStorage
+    localStorage.setItem('currentOrganization', currentOrganization);
+  }, [currentOrganization]);
 
   const checkAuth = async () => {
     try {
@@ -56,8 +64,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const changeOrganization = (orgSubdomain) => {
+    setCurrentOrganization(orgSubdomain);
+    // Recargar la página para aplicar el cambio
+    window.location.reload();
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, error }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      loading, 
+      error,
+      currentOrganization,
+      changeOrganization
+    }}>
       {children}
     </AuthContext.Provider>
   );

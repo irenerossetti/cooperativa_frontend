@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import MainLayout from './components/layout/MainLayout';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
@@ -15,8 +16,14 @@ import LaboresAgricolas from './pages/LaboresAgricolas';
 import ProductosCosechados from './pages/ProductosCosechados';
 import Auditoria from './pages/Auditoria';
 import MetodosPago from './pages/MetodosPago';
+import Ventas from './pages/Ventas';
+import ProductosSemillas from './pages/cliente/ProductosSemillas';
+import ProductosFertilizantes from './pages/cliente/ProductosFertilizantes';
+import ProductosPorCampana from './pages/cliente/ProductosPorCampana';
+import TodosProductos from './pages/cliente/TodosProductos';
+import MisPedidos from './pages/cliente/MisPedidos';
 import PagePlaceholder from './components/common/PagePlaceholder';
-import { Key, FlaskConical, Tractor, Package, CreditCard, Calendar, FileText, BarChart3 } from 'lucide-react';
+import { Key, FlaskConical, Tractor, Package, CreditCard, Calendar, FileText, BarChart3, ShoppingCart, User } from 'lucide-react';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
@@ -51,7 +58,8 @@ const PublicRoute = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <CartProvider>
+        <Router>
         <Routes>
           {/* Ruta pública */}
           <Route
@@ -86,7 +94,26 @@ function App() {
                     <Route path="/labores" element={<LaboresAgricolas />} />
                     <Route path="/productos-cosechados" element={<ProductosCosechados />} />
                     <Route path="/payment-methods" element={<MetodosPago />} />
+                    <Route path="/ventas" element={<Ventas />} />
                     <Route path="/auditoria" element={<Auditoria />} />
+                    
+                    {/* Rutas de productos para clientes */}
+                    <Route path="/productos/semillas" element={<ProductosSemillas />} />
+                    <Route path="/productos/fertilizantes" element={<ProductosFertilizantes />} />
+                    <Route path="/productos/campana" element={<ProductosPorCampana />} />
+                    <Route path="/productos/todos" element={<TodosProductos />} />
+                    
+                    {/* Rutas para socios */}
+                    <Route path="/mis-parcelas" element={<PagePlaceholder title="Mis Parcelas" description="Gestiona tus parcelas" icon={Package} />} />
+                    <Route path="/mis-labores" element={<PagePlaceholder title="Mis Labores" description="Historial de labores agrícolas" icon={Tractor} />} />
+                    <Route path="/mi-produccion" element={<PagePlaceholder title="Mi Producción" description="Historial de producción" icon={Package} />} />
+                    <Route path="/mis-pagos" element={<PagePlaceholder title="Mis Pagos" description="Historial de pagos" icon={CreditCard} />} />
+                    
+                    {/* Rutas para clientes */}
+                    <Route path="/mis-pedidos" element={<MisPedidos />} />
+                    <Route path="/mi-perfil" element={<PagePlaceholder title="Mi Perfil" description="Información personal" icon={User} />} />
+                    
+                    {/* Reportes */}
                     <Route path="/reportes" element={<PagePlaceholder title="Reportes" description="Genera reportes del sistema" icon={BarChart3} />} />
                     <Route path="/reports/labors" element={<PagePlaceholder title="Reporte de Labores" description="Reporte de labores por campaña" icon={BarChart3} />} />
                     <Route path="/reports/production-campaign" element={<PagePlaceholder title="Reporte de Producción" description="Reporte de producción por campaña" icon={BarChart3} />} />
@@ -98,6 +125,7 @@ function App() {
           />
         </Routes>
       </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }

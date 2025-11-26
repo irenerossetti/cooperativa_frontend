@@ -19,7 +19,9 @@ import {
   Map,
   Package,
   Tractor,
-  CreditCard
+  CreditCard,
+  ShoppingCart,
+  User
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -40,84 +42,35 @@ const Sidebar = ({ isOpen, onClose }) => {
     }));
   };
 
-  const menuItems = [
-    {
-      path: '/dashboard',
-      label: 'Dashboard',
-      icon: Home,
-      always: true
-    },
-    {
-      path: '/socios',
-      label: 'Socios',
-      icon: Users,
-      always: true
-    },
-    {
-      path: '/usuarios',
-      label: 'Usuarios',
-      icon: UserCog,
-      always: true
-    },
-    {
-      path: '/roles',
-      label: 'Roles',
-      icon: Key,
-      always: true
-    },
-    {
-      path: '/semillas',
-      label: 'Semillas',
-      icon: Sprout,
-      always: true
-    },
-    {
-      path: '/parcelas',
-      label: 'Parcelas',
-      icon: Map,
-      always: true
-    },
-    {
-      path: '/insumos',
-      label: 'Insumos',
-      icon: FlaskConical,
-      always: true
-    },
-    {
-      path: '/labores',
-      label: 'Labores Agrícolas',
-      icon: Tractor,
-      always: true
-    },
-    {
-      path: '/productos-cosechados',
-      label: 'Productos Cosechados',
-      icon: Package,
-      always: true
-    },
-    {
-      path: '/payment-methods',
-      label: 'Métodos de Pago',
-      icon: CreditCard,
-      always: true
-    },
-    {
-      path: '/campaigns',
-      label: 'Campañas',
-      icon: Calendar,
-      always: true
-    },
-    {
-      path: '/auditoria',
-      label: 'Auditoría',
-      icon: FileText,
-      always: true
-    },
+  // Determinar el rol del usuario
+  const getUserRole = () => {
+    if (user?.is_staff || user?.is_superuser) return 'ADMIN';
+    if (user?.role === 'PARTNER') return 'PARTNER';
+    if (user?.role === 'CUSTOMER') return 'CUSTOMER';
+    return 'CUSTOMER';
+  };
+
+  const userRole = getUserRole();
+
+  // Menús según rol
+  const adminMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: Home },
+    { path: '/socios', label: 'Socios', icon: Users },
+    { path: '/usuarios', label: 'Clientes', icon: UserCog },
+    { path: '/roles', label: 'Roles', icon: Key },
+    { path: '/semillas', label: 'Semillas', icon: Sprout },
+    { path: '/parcelas', label: 'Parcelas', icon: Map },
+    { path: '/insumos', label: 'Insumos', icon: FlaskConical },
+    { path: '/labores', label: 'Labores Agrícolas', icon: Tractor },
+    { path: '/productos-cosechados', label: 'Productos Cosechados', icon: Package },
+    { path: '/ventas', label: 'Ventas / Pedidos', icon: ShoppingCart },
+    { path: '/payment-methods', label: 'Métodos de Pago', icon: CreditCard },
+    { path: '/campaigns', label: 'Campañas', icon: Calendar },
+    { path: '/auditoria', label: 'Auditoría', icon: FileText },
     {
       path: '/reportes',
       label: 'Reportes',
       icon: BarChart3,
-      always: true,
       subMenu: [
         { path: '/reports/labors', label: 'Labores por Campaña', icon: TrendingUp },
         { path: '/reports/production-campaign', label: 'Producción por Campaña', icon: TrendingUp },
@@ -125,6 +78,40 @@ const Sidebar = ({ isOpen, onClose }) => {
       ]
     }
   ];
+
+  const partnerMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: Home },
+    { path: '/mis-parcelas', label: 'Mis Parcelas', icon: Map },
+    { path: '/mis-labores', label: 'Mis Labores', icon: Tractor },
+    { path: '/mi-produccion', label: 'Mi Producción', icon: Package },
+    { path: '/mis-pagos', label: 'Mis Pagos', icon: CreditCard },
+    { path: '/campaigns', label: 'Campañas', icon: Calendar },
+    { path: '/mi-perfil', label: 'Mi Perfil', icon: User },
+  ];
+
+  const customerMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: Home },
+    {
+      path: '/productos',
+      label: 'Productos',
+      icon: Package,
+      subMenu: [
+        { path: '/productos/semillas', label: 'Semillas', icon: Sprout },
+        { path: '/productos/fertilizantes', label: 'Fertilizantes', icon: FlaskConical },
+        { path: '/productos/campana', label: 'Por Campaña', icon: Calendar },
+        { path: '/productos/todos', label: 'Todos los Productos', icon: Package },
+      ]
+    },
+    { path: '/mis-pedidos', label: 'Mis Pedidos', icon: ShoppingCart },
+    { path: '/payment-methods', label: 'Métodos de Pago', icon: CreditCard },
+    { path: '/mi-perfil', label: 'Mi Perfil', icon: User },
+  ];
+
+  // Seleccionar menú según rol
+  let menuItems = [];
+  if (userRole === 'ADMIN') menuItems = adminMenuItems;
+  else if (userRole === 'PARTNER') menuItems = partnerMenuItems;
+  else if (userRole === 'CUSTOMER') menuItems = customerMenuItems;
 
   return (
     <>
@@ -262,10 +249,10 @@ const Sidebar = ({ isOpen, onClose }) => {
             {/* User info */}
             <div className="text-center p-2 bg-white/5 rounded-lg">
               <p className="text-white text-sm font-medium truncate">
-                {user?.nombre || user?.username || 'Usuario'}
+                {user?.first_name || user?.username || 'Usuario'}
               </p>
               <p className="text-emerald-200/60 text-xs truncate">
-                {user?.rol || 'Administrador'}
+                {userRole === 'ADMIN' ? 'Administrador' : userRole === 'PARTNER' ? 'Socio' : 'Cliente'}
               </p>
             </div>
 

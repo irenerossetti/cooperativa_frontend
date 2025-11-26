@@ -95,16 +95,39 @@ export const API_ENDPOINTS = {
 
   // Producción (Sprint 2)
   PRODUCTION: {
-    LIST: `${API_BASE}/production/`,
-    DETAIL: (id) => `${API_BASE}/production/${id}/`,
-    BY_CAMPAIGN: (campaignId) => `${API_BASE}/production/?campaign=${campaignId}`,
-    BY_PARCEL: (parcelId) => `${API_BASE}/production/?parcel=${parcelId}`,
+    LIST: `${API_BASE}/production/harvested-products/`,
+    DETAIL: (id) => `${API_BASE}/production/harvested-products/${id}/`,
+    BY_CAMPAIGN: (campaignId) => `${API_BASE}/production/harvested-products/?campaign=${campaignId}`,
+    BY_PARCEL: (parcelId) => `${API_BASE}/production/harvested-products/?parcel=${parcelId}`,
   },
 
   // Ventas (Sprint 3)
   SALES: {
-    LIST: `${API_BASE}/sales/`,
-    DETAIL: (id) => `${API_BASE}/sales/${id}/`,
+    PAYMENT_METHODS: {
+      LIST: `${API_BASE}/sales/payment-methods/`,
+      DETAIL: (id) => `${API_BASE}/sales/payment-methods/${id}/`,
+    },
+    CUSTOMERS: {
+      LIST: `${API_BASE}/sales/customers/`,
+      DETAIL: (id) => `${API_BASE}/sales/customers/${id}/`,
+    },
+    ORDERS: {
+      LIST: `${API_BASE}/sales/orders/`,
+      DETAIL: (id) => `${API_BASE}/sales/orders/${id}/`,
+      CONFIRM: (id) => `${API_BASE}/sales/orders/${id}/confirm/`,
+      CANCEL: (id) => `${API_BASE}/sales/orders/${id}/cancel/`,
+      SALES_REPORT: `${API_BASE}/sales/orders/sales_report/`,
+      EXPORT_CSV: `${API_BASE}/sales/orders/export_csv/`,
+    },
+    ORDER_ITEMS: {
+      LIST: `${API_BASE}/sales/order-items/`,
+      DETAIL: (id) => `${API_BASE}/sales/order-items/${id}/`,
+    },
+    PAYMENTS: {
+      LIST: `${API_BASE}/sales/payments/`,
+      DETAIL: (id) => `${API_BASE}/sales/payments/${id}/`,
+      HISTORY: `${API_BASE}/sales/payments/payment_history/`,
+    },
   },
 
   // Solicitudes (Sprint 3)
