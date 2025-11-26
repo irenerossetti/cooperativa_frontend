@@ -1,5 +1,6 @@
 import React from 'react';
 import { Users, Package, TrendingUp, DollarSign, Sprout, Map } from 'lucide-react';
+import WeatherWidget from '../../components/weather/WeatherWidget';
 
 const AdminDashboard = () => {
   const stats = [
@@ -19,25 +20,33 @@ const AdminDashboard = () => {
         <p className="text-emerald-200/80">Vista general del sistema cooperativo</p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-200"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg bg-gradient-to-r ${stat.color}`}>
-                  <Icon className="w-6 h-6 text-white" />
+      {/* Stats Grid with Weather */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Stats */}
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={index}
+                className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-200"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-lg bg-gradient-to-r ${stat.color}`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
                 </div>
+                <h3 className="text-3xl font-bold text-white mb-2">{stat.value}</h3>
+                <p className="text-emerald-200/70 text-sm">{stat.label}</p>
               </div>
-              <h3 className="text-3xl font-bold text-white mb-2">{stat.value}</h3>
-              <p className="text-emerald-200/70 text-sm">{stat.label}</p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        {/* Weather Widget */}
+        <div className="lg:col-span-1">
+          <WeatherWidget lat={-17.78} lon={-63.18} />
+        </div>
       </div>
 
       {/* Quick Actions */}
