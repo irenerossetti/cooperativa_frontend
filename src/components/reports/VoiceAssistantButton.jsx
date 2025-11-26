@@ -208,11 +208,14 @@ const VoiceAssistantButton = ({ onReportRequest }) => {
       }
 
       // Comando de exportar
-      if (lowerCommand.includes('exportar') || lowerCommand.includes('descargar')) {
-        const format = lowerCommand.includes('excel') ? 'excel' : 
-                      lowerCommand.includes('pdf') ? 'pdf' : 'csv';
-        setResponse(`Exportando en ${format.toUpperCase()}...`);
-        speak(`Exportando en ${format}`);
+      if (lowerCommand.includes('exportar') || lowerCommand.includes('descargar') || lowerCommand.includes('generar') || lowerCommand.includes('crear')) {
+        let format = 'csv';
+        if (lowerCommand.includes('pdf')) format = 'pdf';
+        else if (lowerCommand.includes('excel')) format = 'excel';
+        else if (lowerCommand.includes('reporte') || lowerCommand.includes('informe')) format = 'pdf';
+        
+        setResponse(`Generando ${format.toUpperCase()}...`);
+        speak(`Generando ${format === 'pdf' ? 'reporte en PDF' : format}`);
         setStatus('success');
         onReportRequest({ type: 'export', format });
         commandRecognized = true;
@@ -416,7 +419,7 @@ const VoiceAssistantButton = ({ onReportRequest }) => {
                   <div className="space-y-1">
                     {[
                       'Quiero el total de socios',
-                      'Producción mayor a 100',
+                      'Generar reporte en PDF',
                       'Top 5 mejores',
                       'Ordenar por rendimiento',
                       'Actualizar datos'

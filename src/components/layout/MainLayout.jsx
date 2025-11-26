@@ -27,6 +27,9 @@ const MainLayout = ({ children }) => {
           {children}
         </main>
       </div>
+
+      {/* Chatbot Flotante */}
+      <Chatbot />
     </div>
   );
 };

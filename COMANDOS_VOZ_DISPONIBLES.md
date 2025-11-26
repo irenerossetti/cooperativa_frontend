@@ -28,8 +28,10 @@
 ### 🔧 Acciones
 - **"Actualizar datos"** → Recarga la información
 - **"Refrescar"** → Actualiza los datos
-- **"Exportar en Excel"** → Descarga reporte en Excel
+- **"Generar reporte en PDF"** → Descarga reporte completo en PDF
+- **"Crear informe"** → Genera y descarga PDF
 - **"Exportar en PDF"** → Descarga reporte en PDF
+- **"Exportar en Excel"** → Descarga reporte en Excel
 - **"Descargar CSV"** → Descarga en formato CSV
 - **"Limpiar filtros"** → Quita todos los filtros aplicados
 
@@ -64,6 +66,14 @@ Sistema: "Ordenando por rendimiento"
 ```
 Usuario: "Quiero el total de socios"
 Sistema: "Mostrando total de socios"
+[Aparece panel visual con todas las estadísticas]
+```
+
+### Caso 5: Generar PDF
+```
+Usuario: "Generar reporte en PDF"
+Sistema: "Generando reporte en PDF"
+[Se descarga automáticamente el archivo PDF]
 ```
 
 ## Notas Técnicas
