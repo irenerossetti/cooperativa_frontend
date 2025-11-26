@@ -216,6 +216,12 @@ const WeatherWidget = ({ lat: initialLat = -17.78, lon: initialLon = -63.18 }) =
           ))}
         </div>
       )}
+
+      {/* Footer profesional */}
+      <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between">
+        <span className="text-blue-200/40 text-xs">Powered by OpenWeatherMap</span>
+        <span className="text-blue-200/40 text-xs">Actualizado hace 5 min</span>
+      </div>
     </div>
   );
 };

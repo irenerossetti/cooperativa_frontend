@@ -3,7 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import MainLayout from './components/layout/MainLayout';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import SimpleRegisterPage from './pages/SimpleRegisterPage';
 import Dashboard from './pages/Dashboard';
 import Socios from './pages/Socios';
 import Usuarios from './pages/Usuarios';
@@ -43,9 +46,9 @@ const ProtectedRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
-// Componente para redirigir si ya está autenticado
+// Componente para rutas públicas - permite acceso siempre
 const PublicRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -55,7 +58,13 @@ const PublicRoute = ({ children }) => {
     );
   }
 
-  return user ? <Navigate to="/dashboard" /> : children;
+  // Permitir acceso siempre (con o sin sesión)
+  return children;
+};
+
+// Componente para landing - siempre se muestra
+const LandingRoute = ({ children }) => {
+  return children;
 };
 
 function App() {
@@ -64,12 +73,38 @@ function App() {
       <CartProvider>
         <Router>
         <Routes>
-          {/* Ruta pública */}
+          {/* Ruta landing page */}
+          <Route 
+            path="/" 
+            element={
+              <LandingRoute>
+                <LandingPage />
+              </LandingRoute>
+            } 
+          />
+          
+          {/* Rutas públicas */}
           <Route
             path="/login"
             element={
               <PublicRoute>
                 <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <SimpleRegisterPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register-organization"
+            element={
+              <PublicRoute>
+                <RegisterPage />
               </PublicRoute>
             }
           />
@@ -82,7 +117,6 @@ function App() {
                 <MainLayout>
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/" element={<Navigate to="/dashboard" />} />
                     
                     {/* Rutas principales */}
                     <Route path="/socios" element={<Socios />} />
