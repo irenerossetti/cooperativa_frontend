@@ -1,28 +1,73 @@
 import React from 'react';
-import { Users, Package, TrendingUp, DollarSign, Sprout, Map } from 'lucide-react';
+import { Users, Package, TrendingUp, DollarSign, Sprout, Map, RefreshCw } from 'lucide-react';
 import WeatherWidget from '../../components/weather/WeatherWidget';
 import GrowthStatsWidget from '../../components/dashboard/GrowthStatsWidget';
 import QuickReportsWidget from '../../components/dashboard/QuickReportsWidget';
 import PriceAlertsWidget from '../../components/dashboard/PriceAlertsWidget';
 import AlertsWidget from '../../components/dashboard/AlertsWidget';
 import HarvestOptimizerWidget from '../../components/dashboard/HarvestOptimizerWidget';
+import { useDashboardStats } from '../../hooks/useDashboardStats';
 
 const AdminDashboard = () => {
+  const dashboardStats = useDashboardStats();
+
   const stats = [
-    { label: 'Total Socios', value: '45', icon: Users, color: 'from-blue-500 to-blue-600' },
-    { label: 'Parcelas Activas', value: '128', icon: Map, color: 'from-green-500 to-green-600' },
-    { label: 'Productos Cosechados', value: '2,450 kg', icon: Package, color: 'from-purple-500 to-purple-600' },
-    { label: 'Campañas Activas', value: '3', icon: Sprout, color: 'from-orange-500 to-orange-600' },
-    { label: 'Ingresos del Mes', value: 'Bs. 45,000', icon: DollarSign, color: 'from-emerald-500 to-emerald-600' },
-    { label: 'Crecimiento', value: '+12%', icon: TrendingUp, color: 'from-pink-500 to-pink-600' },
+    { 
+      label: 'Total Socios', 
+      value: dashboardStats.loading ? '...' : dashboardStats.totalPartners.toString(), 
+      icon: Users, 
+      color: 'from-blue-500 to-blue-600' 
+    },
+    { 
+      label: 'Parcelas Activas', 
+      value: dashboardStats.loading ? '...' : dashboardStats.activeParcels.toString(), 
+      icon: Map, 
+      color: 'from-green-500 to-green-600' 
+    },
+    { 
+      label: 'Productos Cosechados', 
+      value: dashboardStats.loading ? '...' : `${dashboardStats.harvestedProducts.toLocaleString()} kg`, 
+      icon: Package, 
+      color: 'from-purple-500 to-purple-600' 
+    },
+    { 
+      label: 'Campañas Activas', 
+      value: dashboardStats.loading ? '...' : dashboardStats.activeCampaigns.toString(), 
+      icon: Sprout, 
+      color: 'from-orange-500 to-orange-600' 
+    },
+    { 
+      label: 'Ingresos del Mes', 
+      value: dashboardStats.loading ? '...' : `Bs. ${dashboardStats.monthlyRevenue.toLocaleString()}`, 
+      icon: DollarSign, 
+      color: 'from-emerald-500 to-emerald-600' 
+    },
+    { 
+      label: 'Crecimiento', 
+      value: dashboardStats.loading ? '...' : `+${dashboardStats.growthRate}%`, 
+      icon: TrendingUp, 
+      color: 'from-pink-500 to-pink-600' 
+    },
   ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
-        <h1 className="text-2xl font-bold text-white mb-2">Dashboard Administrativo</h1>
-        <p className="text-emerald-200/80">Vista general del sistema cooperativo</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white mb-2">Dashboard Administrativo</h1>
+            <p className="text-emerald-200/80">Vista general del sistema cooperativo</p>
+          </div>
+          <button
+            onClick={dashboardStats.refresh}
+            disabled={dashboardStats.loading}
+            className="p-2 bg-emerald-500/20 hover:bg-emerald-500/30 rounded-lg transition-colors disabled:opacity-50"
+            title="Actualizar estadísticas"
+          >
+            <RefreshCw className={`w-5 h-5 text-emerald-200 ${dashboardStats.loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {/* Stats Grid with Weather */}
