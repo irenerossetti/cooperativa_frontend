@@ -463,26 +463,6 @@ const SuperAdminDashboard = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end space-x-2">
                           <button
-                            onClick={() => {
-                              // LIMPIAR TODO primero
-                              localStorage.clear();
-                              sessionStorage.clear();
-                              
-                              // Establecer la nueva organización
-                              localStorage.setItem('currentOrganization', org.subdomain);
-                              
-                              // Actualizar el header de axios
-                              axios.defaults.headers.common['X-Organization-Subdomain'] = org.subdomain;
-                              
-                              // Redirigir con recarga completa
-                              window.location.href = '/dashboard';
-                            }}
-                            className="p-2 text-purple-400 hover:bg-gray-700 rounded-lg transition"
-                            title="Acceder a esta organización"
-                          >
-                            <ArrowRight className="w-4 h-4" />
-                          </button>
-                          <button
                             onClick={() => viewOrgDetails(org.id)}
                             className="p-2 text-blue-400 hover:bg-gray-700 rounded-lg transition"
                             title="Ver detalles"
@@ -590,6 +570,24 @@ const SuperAdminDashboard = () => {
                 </div>
               </div>
 
+              {/* Access Info */}
+              <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-4">
+                <h3 className="text-lg font-semibold text-blue-300 mb-3 flex items-center space-x-2">
+                  <Shield className="w-5 h-5" />
+                  <span>Acceso a la Organización</span>
+                </h3>
+                <div className="space-y-2 text-sm">
+                  <p className="text-gray-300">
+                    Para acceder a esta organización, usa las credenciales del administrador:
+                  </p>
+                  <div className="bg-gray-800 rounded p-3 space-y-1">
+                    <p className="text-gray-400">Usuario: <span className="text-white font-mono">{selectedOrg.members.find(m => m.role === 'ADMIN')?.username || 'N/A'}</span></p>
+                    <p className="text-gray-400">Email: <span className="text-white font-mono">{selectedOrg.members.find(m => m.role === 'ADMIN')?.email || 'N/A'}</span></p>
+                    <p className="text-yellow-300 text-xs mt-2">💡 Inicia sesión con estas credenciales en la página principal</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Members */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">
@@ -602,7 +600,9 @@ const SuperAdminDashboard = () => {
                         <p className="text-white font-medium">{member.full_name || member.username}</p>
                         <p className="text-gray-400 text-sm">{member.email}</p>
                       </div>
-                      <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-xs">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        member.role === 'ADMIN' ? 'bg-red-600 text-white' : 'bg-blue-600 text-white'
+                      }`}>
                         {member.role}
                       </span>
                     </div>
@@ -614,36 +614,7 @@ const SuperAdminDashboard = () => {
         </div>
       )}
 
-      {/* Quick Access - Change Organization */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 shadow-2xl">
-          <p className="text-white text-sm mb-2 font-semibold">🔄 Cambio Rápido</p>
-          <select
-            onChange={(e) => {
-              if (e.target.value) {
-                // LIMPIAR TODO primero
-                localStorage.clear();
-                sessionStorage.clear();
-                
-                // Establecer la nueva organización
-                localStorage.setItem('currentOrganization', e.target.value);
-                axios.defaults.headers.common['X-Organization-Subdomain'] = e.target.value;
-                
-                // Redirigir con recarga completa
-                window.location.href = '/dashboard';
-              }
-            }}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-          >
-            <option value="">Seleccionar organización...</option>
-            {organizations.map((org) => (
-              <option key={org.id} value={org.subdomain}>
-                {org.name} ({org.members_count} miembros)
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+
 
       {/* Create Organization Modal */}
       {showCreateModal && (
