@@ -10,10 +10,16 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 
 // Configurar organización inicial desde localStorage
-// Si no hay organización guardada, usar 'sanjuan' como fallback
-const initialOrganization = localStorage.getItem('currentOrganization') || 'sanjuan';
+// Si no hay organización guardada, usar 'sammantha' como fallback
+const initialOrganization = localStorage.getItem('currentOrganization') || 'sammantha';
 if (initialOrganization) {
   axios.defaults.headers.common['X-Organization-Subdomain'] = initialOrganization;
+}
+
+// Configurar token JWT si existe
+const token = localStorage.getItem('access_token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 export const AuthProvider = ({ children }) => {
@@ -49,9 +55,15 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await axios.post(`${API_URL}${API_ENDPOINTS.AUTH.LOGIN}`, credentials);
-      const { user } = response.data;
+      const { user, access, refresh } = response.data;
       
-      // Django Session Authentication - no necesitamos token
+      // Guardar tokens JWT
+      if (access) {
+        localStorage.setItem('access_token', access);
+        localStorage.setItem('refresh_token', refresh);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+      }
+      
       setUser(user);
       
       // Si el usuario tiene partner, usar su organización automáticamente
@@ -78,6 +90,10 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Limpiar tokens JWT
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      delete axios.defaults.headers.common['Authorization'];
       setUser(null);
     }
   };
