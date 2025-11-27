@@ -463,6 +463,32 @@ const SuperAdminDashboard = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end space-x-2">
                           <button
+                            onClick={() => {
+                              // Guardar tokens actuales
+                              const accessToken = localStorage.getItem('access_token');
+                              const refreshToken = localStorage.getItem('refresh_token');
+                              
+                              // Cambiar organización
+                              localStorage.setItem('currentOrganization', org.subdomain);
+                              
+                              // Restaurar tokens
+                              if (accessToken) {
+                                localStorage.setItem('access_token', accessToken);
+                                localStorage.setItem('refresh_token', refreshToken);
+                              }
+                              
+                              // Actualizar header de axios
+                              axios.defaults.headers.common['X-Organization-Subdomain'] = org.subdomain;
+                              
+                              // Redirigir
+                              window.location.href = '/dashboard';
+                            }}
+                            className="p-2 text-purple-400 hover:bg-gray-700 rounded-lg transition"
+                            title="Acceder a esta organización"
+                          >
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                          <button
                             onClick={() => viewOrgDetails(org.id)}
                             className="p-2 text-blue-400 hover:bg-gray-700 rounded-lg transition"
                             title="Ver detalles"
