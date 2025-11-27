@@ -197,6 +197,24 @@ export const API_ENDPOINTS = {
     CURRENT: `${API_BASE}/weather/current/`,
     FORECAST: `${API_BASE}/weather/forecast/`,
   },
+
+  // Multi-Tenancy
+  TENANTS: {
+    REGISTER: `${API_BASE}/tenants/register/`,
+    MY_ORGANIZATIONS: `${API_BASE}/tenants/my-organizations/`,
+    ORGANIZATIONS: `${API_BASE}/tenants/organizations/`,
+    CURRENT: `${API_BASE}/tenants/organizations/current/`,
+  },
+
+  // Super Admin
+  SUPER_ADMIN: {
+    STATS: `${API_BASE}/tenants/super-admin/stats/`,
+    ORGANIZATIONS: `${API_BASE}/tenants/super-admin/organizations/`,
+    CREATE_ORG: `${API_BASE}/tenants/super-admin/organizations/create/`,
+    ORG_DETAIL: (id) => `${API_BASE}/tenants/super-admin/organizations/${id}/`,
+    UPDATE_ORG: (id) => `${API_BASE}/tenants/super-admin/organizations/${id}/update/`,
+    DELETE_ORG: (id) => `${API_BASE}/tenants/super-admin/organizations/${id}/delete/`,
+  },
 };
 
 export default API_ENDPOINTS;

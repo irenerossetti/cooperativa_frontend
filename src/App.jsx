@@ -7,6 +7,8 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import SimpleRegisterPage from './pages/SimpleRegisterPage';
+import SuperAdminLoginPage from './pages/SuperAdminLoginPage';
+import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard';
 import Dashboard from './pages/Dashboard';
 import Socios from './pages/Socios';
 import Usuarios from './pages/Usuarios';
@@ -109,6 +111,24 @@ function App() {
               <PublicRoute>
                 <RegisterPage />
               </PublicRoute>
+            }
+          />
+          
+          {/* Super Admin Routes */}
+          <Route
+            path="/super-admin"
+            element={
+              <PublicRoute>
+                <SuperAdminLoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/super-admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <SuperAdminDashboard />
+              </ProtectedRoute>
             }
           />
 

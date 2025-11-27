@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Organización - Limpio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .org-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .org-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .org-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .org-button.empty {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .org-button.with-data {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .org-name {
+            font-size: 18px;
+        }
+        
+        .org-subdomain {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        .org-count {
+            background: rgba(255,255,255,0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            color: #333;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status.show {
+            display: block;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-color.empty {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .legend-color.with-data {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Cambiar Organización</h1>
+        <p class="subtitle">Selecciona una organización para acceder. Se limpiará el caché automáticamente.</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color empty"></div>
+                <span>Vacía (0 datos)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color with-data"></div>
+                <span>Con datos</span>
+            </div>
+        </div>
+        
+        <div class="org-list" id="orgList">
+            <p style="text-align: center; color: #666;">Cargando organizaciones...</p>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        async function loadOrganizations() {
+            try {
+                const response = await fetch(`${API_URL}/api/tenants/organizations/`, {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar organizaciones');
+                }
+                
+                const data = await response.json();
+                displayOrganizations(data);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('orgList').innerHTML = `
+                    <p style="color: #721c24; text-align: center;">
+                        ❌ Error al cargar organizaciones. Asegúrate de estar logueado como super admin.
+                    </p>
+                `;
+            }
+        }
+        
+        function displayOrganizations(organizations) {
+            const orgList = document.getElementById('orgList');
+            
+            if (organizations.length === 0) {
+                orgList.innerHTML = '<p style="text-align: center; color: #666;">No hay organizaciones disponibles</p>';
+                return;
+            }
+            
+            orgList.innerHTML = organizations.map(org => {
+                const isEmpty = org.member_count === 0;
+                const buttonClass = isEmpty ? 'empty' : 'with-data';
+                const icon = isEmpty ? '✨' : '📊';
+                
+                return `
+                    <button class="org-button ${buttonClass}" onclick="changeOrganization('${org.subdomain}', '${org.name}')">
+                        <div>
+                            <div class="org-name">${icon} ${org.name}</div>
+                            <div class="org-subdomain">${org.subdomain}</div>
+                        </div>
+                        <div class="org-count">${org.member_count || 0} socios</div>
+                    </button>
+                `;
+            }).join('');
+        }
+        
+        function changeOrganization(subdomain, name) {
+            const status = document.getElementById('status');
+            status.className = 'status show';
+            status.textContent = `🔄 Cambiando a ${name}...`;
+            
+            // Limpiar TODO el localStorage
+            localStorage.clear();
+            
+            // Establecer la nueva organización
+            localStorage.setItem('currentOrganization', subdomain);
+            
+            // Mostrar mensaje de éxito
+            status.className = 'status show success';
+            status.textContent = `✅ Cambiando a ${name}. Redirigiendo...`;
+            
+            // Redirigir después de un breve delay
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 500);
+        }
+        
+        // Cargar organizaciones al iniciar
+        loadOrganizations();
+    </script>
+</body>
+</html>

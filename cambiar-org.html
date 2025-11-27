@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Organización</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .org-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .org-button:hover {
+            transform: scale(1.05);
+        }
+        .btn-sypha {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .btn-sanjuan {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .btn-progreso {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .btn-demo {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .current {
+            text-align: center;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 Cambiar Organización</h1>
+        
+        <div class="current" id="current-org">
+            Organización actual: Cargando...
+        </div>
+
+        <button class="org-button btn-sypha" onclick="cambiarOrg('syphita', 'Sypha')">
+            🆕 Sypha (Tu organización nueva - VACÍA)
+        </button>
+
+        <button class="org-button btn-sanjuan" onclick="cambiarOrg('sanjuan', 'Cooperativa San Juan')">
+            📊 Cooperativa San Juan (Con datos de prueba)
+        </button>
+
+        <button class="org-button btn-progreso" onclick="cambiarOrg('progreso', 'Cooperativa El Progreso')">
+            🌱 Cooperativa El Progreso
+        </button>
+
+        <button class="org-button btn-demo" onclick="cambiarOrg('demo', 'Cooperativa Demo')">
+            🧪 Cooperativa Demo
+        </button>
+
+        <div class="info">
+            <strong>ℹ️ Información:</strong><br>
+            • <strong>Sypha:</strong> Tu organización nueva (0 socios, 0 parcelas)<br>
+            • <strong>San Juan:</strong> Organización con datos de prueba (10 socios)<br>
+            • Después de hacer clic, la página se recargará automáticamente
+        </div>
+    </div>
+
+    <script>
+        // Mostrar organización actual
+        function mostrarOrgActual() {
+            const org = localStorage.getItem('currentOrganization') || 'ninguna';
+            document.getElementById('current-org').textContent = 
+                'Organización actual: ' + org;
+        }
+
+        // Cambiar organización
+        function cambiarOrg(subdomain, nombre) {
+            if (confirm('¿Cambiar a ' + nombre + '?')) {
+                localStorage.setItem('currentOrganization', subdomain);
+                alert('✅ Organización cambiada a: ' + nombre + '\n\nLa página se recargará.');
+                window.location.href = '/dashboard';
+            }
+        }
+
+        // Mostrar org actual al cargar
+        mostrarOrgActual();
+    </script>
+</body>
+</html>

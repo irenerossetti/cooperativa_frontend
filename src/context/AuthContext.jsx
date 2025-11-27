@@ -10,8 +10,11 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 
 // Configurar organización inicial desde localStorage
+// Si no hay organización guardada, usar 'sanjuan' como fallback
 const initialOrganization = localStorage.getItem('currentOrganization') || 'sanjuan';
-axios.defaults.headers.common['X-Organization-Subdomain'] = initialOrganization;
+if (initialOrganization) {
+  axios.defaults.headers.common['X-Organization-Subdomain'] = initialOrganization;
+}
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

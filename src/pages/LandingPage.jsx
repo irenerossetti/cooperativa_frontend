@@ -2,12 +2,53 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Sprout, Users, BarChart3, Cloud, MessageSquare, Shield, 
-  CheckCircle, ArrowRight, Menu, X, Zap, TrendingUp, Globe
+  CheckCircle, ArrowRight, Menu, X, Zap, TrendingUp, Globe,
+  CreditCard, Lock
 } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [paymentData, setPaymentData] = useState({
+    cardNumber: '',
+    cardName: '',
+    expiryDate: '',
+    cvv: ''
+  });
+
+  const handleSubscribe = (planName, planPrice) => {
+    setSelectedPlan({ name: planName, price: planPrice });
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSubmit = (e) => {
+    e.preventDefault();
+    // Aquí iría la lógica de procesamiento de pago
+    alert(`Pago procesado exitosamente para el plan ${selectedPlan.name}`);
+    setShowPaymentModal(false);
+    navigate('/register?type=socio&plan=' + selectedPlan.name.toLowerCase());
+  };
+
+  const formatCardNumber = (value) => {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const matches = v.match(/\d{4,16}/g);
+    const match = (matches && matches[0]) || '';
+    const parts = [];
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4));
+    }
+    return parts.length ? parts.join(' ') : value;
+  };
+
+  const formatExpiryDate = (value) => {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    if (v.length >= 2) {
+      return v.slice(0, 2) + '/' + v.slice(2, 4);
+    }
+    return v;
+  };
 
   const features = [
     {
@@ -68,6 +109,14 @@ const LandingPage = () => {
               <a href="#benefits" className="text-gray-700 hover:text-green-600 transition">Beneficios</a>
               <a href="#pricing" className="text-gray-700 hover:text-green-600 transition">Planes</a>
               <button
+                onClick={() => navigate('/super-admin')}
+                className="px-4 py-2 text-gray-500 hover:text-gray-700 transition text-sm"
+                title="Panel de Administración"
+              >
+                <Shield className="w-4 h-4 inline mr-1" />
+                Admin
+              </button>
+              <button
                 onClick={() => navigate('/login')}
                 className="px-4 py-2 text-green-600 hover:text-green-700 transition"
               >
@@ -98,6 +147,13 @@ const LandingPage = () => {
               <a href="#features" className="block text-gray-700 hover:text-green-600">Funcionalidades</a>
               <a href="#benefits" className="block text-gray-700 hover:text-green-600">Beneficios</a>
               <a href="#pricing" className="block text-gray-700 hover:text-green-600">Planes</a>
+              <button
+                onClick={() => navigate('/super-admin')}
+                className="block w-full text-left text-gray-500 hover:text-gray-700 text-sm"
+              >
+                <Shield className="w-4 h-4 inline mr-1" />
+                Admin
+              </button>
               <button
                 onClick={() => navigate('/login')}
                 className="block w-full text-left text-gray-700 hover:text-green-600"
@@ -299,7 +355,10 @@ const LandingPage = () => {
                   <span>Soporte por email</span>
                 </li>
               </ul>
-              <button className="w-full px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition">
+              <button 
+                onClick={() => handleSubscribe('Básico', 49)}
+                className="w-full px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition"
+              >
                 Comenzar
               </button>
             </div>
@@ -338,7 +397,7 @@ const LandingPage = () => {
                 </li>
               </ul>
               <button 
-                onClick={() => navigate('/register?type=socio&plan=profesional')}
+                onClick={() => handleSubscribe('Profesional', 99)}
                 className="w-full px-6 py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition font-semibold"
               >
                 Seleccionar Plan
@@ -375,7 +434,7 @@ const LandingPage = () => {
                 </li>
               </ul>
               <button 
-                onClick={() => navigate('/register?type=socio&plan=enterprise')}
+                onClick={() => handleSubscribe('Enterprise', 'Custom')}
                 className="w-full px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition"
               >
                 Seleccionar Plan
@@ -404,6 +463,127 @@ const LandingPage = () => {
           </button>
         </div>
       </section>
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fadeIn">
+            <button
+              onClick={() => setShowPaymentModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CreditCard className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Método de Pago
+              </h3>
+              <p className="text-gray-600">
+                Plan {selectedPlan?.name} - ${selectedPlan?.price}{selectedPlan?.price !== 'Custom' && '/mes'}
+              </p>
+            </div>
+
+            <form onSubmit={handlePaymentSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Número de Tarjeta
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={paymentData.cardNumber}
+                    onChange={(e) => setPaymentData({
+                      ...paymentData,
+                      cardNumber: formatCardNumber(e.target.value)
+                    })}
+                    placeholder="1234 5678 9012 3456"
+                    maxLength="19"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <CreditCard className="absolute right-3 top-3.5 w-5 h-5 text-gray-400" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre en la Tarjeta
+                </label>
+                <input
+                  type="text"
+                  value={paymentData.cardName}
+                  onChange={(e) => setPaymentData({
+                    ...paymentData,
+                    cardName: e.target.value.toUpperCase()
+                  })}
+                  placeholder="JUAN PÉREZ"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Fecha de Expiración
+                  </label>
+                  <input
+                    type="text"
+                    value={paymentData.expiryDate}
+                    onChange={(e) => setPaymentData({
+                      ...paymentData,
+                      expiryDate: formatExpiryDate(e.target.value)
+                    })}
+                    placeholder="MM/AA"
+                    maxLength="5"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    CVV
+                  </label>
+                  <input
+                    type="text"
+                    value={paymentData.cvv}
+                    onChange={(e) => setPaymentData({
+                      ...paymentData,
+                      cvv: e.target.value.replace(/\D/g, '')
+                    })}
+                    placeholder="123"
+                    maxLength="4"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
+                <Lock className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-green-800">
+                  Tu información está protegida con encriptación SSL de 256 bits
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-lg shadow-lg"
+              >
+                Confirmar Pago
+              </button>
+
+              <p className="text-xs text-center text-gray-500">
+                Al confirmar, aceptas nuestros términos y condiciones
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-12">
