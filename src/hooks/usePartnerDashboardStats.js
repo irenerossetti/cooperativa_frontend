@@ -26,14 +26,14 @@ export const usePartnerDashboardStats = () => {
       const partnerId = user.partner.id;
 
       // Obtener mis parcelas
-      const parcelsResponse = await api.get(`/api/parcels/parcels/?partner=${partnerId}`);
+      const parcelsResponse = await api.get(`/api/parcels/parcels/?partner=${partnerId}&page_size=10000`);
       const parcels = parcelsResponse.data.results || parcelsResponse.data || [];
       const myParcels = parcels.filter(p => p.status === 'ACTIVE').length;
 
       // Obtener mi producción total
       let totalProduction = 0;
       try {
-        const productsResponse = await api.get(`/api/production/harvested-products/?partner=${partnerId}`);
+        const productsResponse = await api.get(`/api/production/harvested-products/?partner=${partnerId}&page_size=10000`);
         const products = productsResponse.data.results || productsResponse.data || [];
         totalProduction = products.reduce((sum, p) => sum + (parseFloat(p.quantity) || 0), 0);
       } catch (error) {
@@ -43,7 +43,7 @@ export const usePartnerDashboardStats = () => {
       // Obtener labores realizadas
       let completedActivities = 0;
       try {
-        const activitiesResponse = await api.get(`/api/farm-activities/activities/`);
+        const activitiesResponse = await api.get(`/api/farm-activities/activities/?page_size=10000`);
         const activities = activitiesResponse.data.results || activitiesResponse.data || [];
         // Filtrar por parcelas del socio
         const parcelIds = parcels.map(p => p.id);
@@ -57,7 +57,7 @@ export const usePartnerDashboardStats = () => {
       // Obtener campañas activas (del socio)
       let activeCampaigns = 0;
       try {
-        const campaignsResponse = await api.get('/api/campaigns/campaigns/');
+        const campaignsResponse = await api.get('/api/campaigns/campaigns/?page_size=10000');
         const campaigns = campaignsResponse.data.results || campaignsResponse.data || [];
         activeCampaigns = campaigns.filter(c => c.status === 'ACTIVE').length;
       } catch (error) {
@@ -67,7 +67,7 @@ export const usePartnerDashboardStats = () => {
       // Calcular ingresos del mes (ventas del socio)
       let monthlyRevenue = 0;
       try {
-        const ordersResponse = await api.get('/api/sales/orders/');
+        const ordersResponse = await api.get('/api/sales/orders/?page_size=10000');
         const orders = ordersResponse.data.results || ordersResponse.data || [];
         
         const currentMonth = new Date().getMonth();
@@ -91,7 +91,7 @@ export const usePartnerDashboardStats = () => {
       
       let recentProduction = 0;
       try {
-        const productsResponse = await api.get(`/api/production/harvested-products/?partner=${partnerId}`);
+        const productsResponse = await api.get(`/api/production/harvested-products/?partner=${partnerId}&page_size=10000`);
         const products = productsResponse.data.results || productsResponse.data || [];
         recentProduction = products
           .filter(p => new Date(p.harvest_date) >= thirtyDaysAgo)

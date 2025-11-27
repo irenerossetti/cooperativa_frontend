@@ -19,20 +19,20 @@ export const useDashboardStats = () => {
 
   const fetchStats = async () => {
     try {
-      // Obtener socios
-      const partnersResponse = await api.get('/api/partners/partners/');
+      // Obtener socios (solicitar página grande para obtener todos)
+      const partnersResponse = await api.get('/api/partners/partners/?page_size=10000');
       const partners = partnersResponse.data.results || partnersResponse.data || [];
       const totalPartners = partners.length;
 
-      // Obtener parcelas
-      const parcelsResponse = await api.get('/api/parcels/parcels/');
+      // Obtener parcelas (solicitar página grande para obtener todos)
+      const parcelsResponse = await api.get('/api/parcels/parcels/?page_size=10000');
       const parcels = parcelsResponse.data.results || parcelsResponse.data || [];
       const activeParcels = parcels.filter(p => p.status === 'ACTIVE').length;
 
       // Obtener productos cosechados
       let harvestedProducts = 0;
       try {
-        const productsResponse = await api.get('/api/production/harvested-products/');
+        const productsResponse = await api.get('/api/production/harvested-products/?page_size=10000');
         const products = productsResponse.data.results || productsResponse.data || [];
         harvestedProducts = products.reduce((sum, p) => sum + (parseFloat(p.quantity) || 0), 0);
       } catch (error) {
@@ -42,7 +42,7 @@ export const useDashboardStats = () => {
       // Obtener campañas activas
       let activeCampaigns = 0;
       try {
-        const campaignsResponse = await api.get('/api/campaigns/campaigns/');
+        const campaignsResponse = await api.get('/api/campaigns/campaigns/?page_size=10000');
         const campaigns = campaignsResponse.data.results || campaignsResponse.data || [];
         activeCampaigns = campaigns.filter(c => c.status === 'ACTIVE').length;
       } catch (error) {
@@ -52,7 +52,7 @@ export const useDashboardStats = () => {
       // Calcular ingresos del mes (de ventas)
       let monthlyRevenue = 0;
       try {
-        const ordersResponse = await api.get('/api/sales/orders/');
+        const ordersResponse = await api.get('/api/sales/orders/?page_size=10000');
         const orders = ordersResponse.data.results || ordersResponse.data || [];
         
         const currentMonth = new Date().getMonth();
