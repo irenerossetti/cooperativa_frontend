@@ -5,7 +5,7 @@ import GrowthStatsWidget from '../../components/dashboard/GrowthStatsWidget';
 import QuickReportsWidget from '../../components/dashboard/QuickReportsWidget';
 import PriceAlertsWidget from '../../components/dashboard/PriceAlertsWidget';
 import AlertsWidget from '../../components/dashboard/AlertsWidget';
-import HarvestOptimizerWidget from '../../components/dashboard/HarvestOptimizerWidget';
+import CropDistributionWidget from '../../components/dashboard/CropDistributionWidget';
 import { useDashboardStats } from '../../hooks/useDashboardStats';
 
 const AdminDashboard = () => {
@@ -111,13 +111,13 @@ const AdminDashboard = () => {
         <GrowthStatsWidget />
       </div>
 
-      {/* Alertas y Optimización */}
+      {/* Alertas y Distribución */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Alertas Tempranas */}
         <AlertsWidget />
         
-        {/* Optimizador de Cosecha */}
-        <HarvestOptimizerWidget />
+        {/* Distribución de Cultivos */}
+        <CropDistributionWidget />
       </div>
 
       {/* Quick Actions */}
