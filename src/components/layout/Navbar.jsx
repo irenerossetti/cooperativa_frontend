@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import OrganizationSelector from '../OrganizationSelector';
+import NotificationBell from '../notifications/NotificationBell';
 
 const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
   const { user, logout, loading } = useAuth();
@@ -58,10 +59,7 @@ const Navbar = ({ onMenuToggle, isSidebarOpen }) => {
         <OrganizationSelector />
         
         {/* Notifications */}
-        <button className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-        </button>
+        <NotificationBell />
 
         {/* Shopping Cart - Para clientes y socios */}
         {showCart && (

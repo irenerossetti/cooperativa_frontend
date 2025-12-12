@@ -34,6 +34,12 @@ import ProductosPorCampana from './pages/cliente/ProductosPorCampana';
 import TodosProductos from './pages/cliente/TodosProductos';
 import MisPedidos from './pages/cliente/MisPedidos';
 import PagePlaceholder from './components/common/PagePlaceholder';
+// Nuevas funcionalidades
+import NotificationsPage from './pages/NotificationsPage';
+import DashboardRealTime from './pages/DashboardRealTime';
+import AIChat from './pages/AIChat';
+import EventsCalendar from './pages/EventsCalendar';
+import GoalsPage from './pages/GoalsPage';
 import { Key, FlaskConical, Tractor, Package, CreditCard, Calendar, FileText, BarChart3, ShoppingCart, User } from 'lucide-react';
 
 // Componente para rutas protegidas
@@ -156,6 +162,13 @@ function App() {
                     <Route path="/payment-methods" element={<MetodosPago />} />
                     <Route path="/ventas" element={<Ventas />} />
                     <Route path="/auditoria" element={<Auditoria />} />
+                    
+                    {/* Nuevas funcionalidades */}
+                    <Route path="/notifications" element={<NotificationsPage />} />
+                    <Route path="/dashboard-realtime" element={<DashboardRealTime />} />
+                    <Route path="/ai-chat" element={<AIChat />} />
+                    <Route path="/events" element={<EventsCalendar />} />
+                    <Route path="/goals" element={<GoalsPage />} />
                     
                     {/* Rutas de productos para clientes */}
                     <Route path="/productos/semillas" element={<ProductosSemillas />} />

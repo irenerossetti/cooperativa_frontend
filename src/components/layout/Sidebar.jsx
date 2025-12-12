@@ -21,7 +21,11 @@ import {
   Tractor,
   CreditCard,
   ShoppingCart,
-  User
+  User,
+  Bell,
+  Activity,
+  MessageSquare,
+  Target
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -55,6 +59,9 @@ const Sidebar = ({ isOpen, onClose }) => {
   // Menús según rol
   const adminMenuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Home },
+    { path: '/dashboard-realtime', label: 'Dashboard Tiempo Real', icon: Activity },
+    { path: '/notifications', label: 'Notificaciones', icon: Bell },
+    { path: '/ai-chat', label: 'Asistente IA', icon: MessageSquare },
     { path: '/socios', label: 'Socios', icon: Users },
     { path: '/usuarios', label: 'Clientes', icon: UserCog },
     { path: '/roles', label: 'Roles', icon: Key },
@@ -66,6 +73,8 @@ const Sidebar = ({ isOpen, onClose }) => {
     { path: '/ventas', label: 'Ventas / Pedidos', icon: ShoppingCart },
     { path: '/payment-methods', label: 'Métodos de Pago', icon: CreditCard },
     { path: '/campaigns', label: 'Campañas', icon: Calendar },
+    { path: '/events', label: 'Calendario Eventos', icon: Calendar },
+    { path: '/goals', label: 'Metas y Objetivos', icon: Target },
     { path: '/auditoria', label: 'Auditoría', icon: FileText },
     {
       path: '/reportes',
@@ -84,16 +93,22 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const partnerMenuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Home },
+    { path: '/notifications', label: 'Notificaciones', icon: Bell },
+    { path: '/ai-chat', label: 'Asistente IA', icon: MessageSquare },
     { path: '/mis-parcelas', label: 'Mis Parcelas', icon: Map },
     { path: '/mis-labores', label: 'Mis Labores', icon: Tractor },
     { path: '/mi-produccion', label: 'Mi Producción', icon: Package },
     { path: '/mis-pagos', label: 'Mis Pagos', icon: CreditCard },
     { path: '/campaigns', label: 'Campañas', icon: Calendar },
+    { path: '/events', label: 'Eventos', icon: Calendar },
+    { path: '/goals', label: 'Mis Metas', icon: Target },
     { path: '/mi-perfil', label: 'Mi Perfil', icon: User },
   ];
 
   const customerMenuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Home },
+    { path: '/notifications', label: 'Notificaciones', icon: Bell },
+    { path: '/ai-chat', label: 'Asistente IA', icon: MessageSquare },
     {
       path: '/productos',
       label: 'Productos',
@@ -107,6 +122,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     },
     { path: '/mis-pedidos', label: 'Mis Pedidos', icon: ShoppingCart },
     { path: '/payment-methods', label: 'Métodos de Pago', icon: CreditCard },
+    { path: '/events', label: 'Eventos', icon: Calendar },
     { path: '/mi-perfil', label: 'Mi Perfil', icon: User },
   ];
 
